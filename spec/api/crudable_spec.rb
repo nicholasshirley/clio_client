@@ -26,7 +26,7 @@ describe ClioClient::Api::Crudable do
     end
 
     it "issues with create request" do
-      session.stub(:post).with("test", {"dummy" => params}.to_json).and_return(response)
+      allow(session).to receive(:post).with("test", { "dummy": params }.to_json).and_return(response)
       record = subject.create(params)
       expect(record).to be_kind_of TestResource
       expect(record.string).to eql "1"
@@ -34,7 +34,7 @@ describe ClioClient::Api::Crudable do
 
     context "when errors are returned" do
       it "should parse them inline" do
-        session.stub(:post).with("test", {"dummies" => [params, params]}.to_json).and_return({"dummies" => [response["dummy"], inline_error_response]})
+        allow(session).to receive(:post).with("test", {"dummies" => [params, params]}.to_json).and_return({"dummies" => [response["dummy"], inline_error_response]})
         records = subject.create([params, params])
         expect(records[0]).to be_kind_of TestResource
         expect(records[0].string).to eql "1"
@@ -52,7 +52,7 @@ describe ClioClient::Api::Crudable do
     end
 
     it "issues with update request" do
-      record = session.stub(:put).with("test/1", {"dummy" => params}.to_json).and_return(response)
+      record = allow(session).to receive(:put).with("test/1", {"dummy" => params}.to_json).and_return(response)
       record = subject.update("1", params)
       expect(record).to be_kind_of TestResource
       expect(record.string).to eql "1"
@@ -61,7 +61,7 @@ describe ClioClient::Api::Crudable do
 
   describe "#destroy" do
     it "issues a delete request" do
-      session.should_receive(:delete)
+      expect(session).to receive(:delete)
       subject.destroy(1)
     end
   end

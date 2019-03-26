@@ -6,7 +6,7 @@ describe ClioClient::Resource do
   let(:params) { {"id" => 1} }
   let(:session) { double("ClioClient::Session") }
   let(:api) { double("ClioClient::Api::Base") }
-  before { subject.stub(:api).and_return(api) }
+  before { allow(subject).to receive(:api).and_return(api) }
   
   describe "an integer field" do
     let(:params) { {"int" => "1"} }
@@ -62,17 +62,17 @@ describe ClioClient::Resource do
 
   describe "#save" do
     let(:to_params) { {"special" => :params} }
-    before { subject.stub(:to_params).and_return(to_params) }
+    before { allow(subject).to receive(:to_params).and_return(to_params) }
     context "when the record is new" do
       let(:params) { {} }
       it "makes a create call" do
-        api.should_receive(:create).with(to_params)
+        expect(api).to receive(:create).with(to_params)
         subject.save
       end
     end
     context "when the record has an id" do
       it "makes a update call" do
-        api.should_receive(:update).with(subject.id, to_params)
+        expect(api).to receive(:update).with(subject.id, to_params)
         subject.save
       end
     end
@@ -89,7 +89,7 @@ describe ClioClient::Resource do
     end
     context "when the record is saved" do
       it "should make a find call" do
-        api.should_receive(:find).with(subject.id)
+        expect(api).to receive(:find).with(subject.id)
         subject.reload
       end
     end
@@ -106,7 +106,7 @@ describe ClioClient::Resource do
     end
     context "when the record is saved" do
       it "should make a destroy call" do
-        api.should_receive(:destroy).with(subject.id)
+        expect(api).to receive(:destroy).with(subject.id)
         subject.destroy
       end
     end

@@ -14,7 +14,7 @@ describe ClioClient::Api::Listable do
     end
     
     it "should return the correct data items" do
-      session.stub(:get).and_return(response)
+      allow(session).to receive(:get).and_return(response)
       records = subject.list
       expect(records.count).to eql 2
       expect(records.first).to be_kind_of TestResource
