@@ -1,4 +1,5 @@
 module ClioClient
+  require 'date'
 
   class ResourceNotSaved < Exception; end
   class AttributeReadOnly < Exception; end
